@@ -1,5 +1,6 @@
 import { LightningElement, wire, track } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
+import reflectValue from "@salesforce/apex/valueReflection.reflectValue";
 
 export default class Parameter_reader extends LightningElement {
   @track displayValue;
@@ -9,11 +10,13 @@ export default class Parameter_reader extends LightningElement {
     if (currentPageReference) {
       const urlValue = currentPageReference.state.c__myUrlParameter;
       if (urlValue) {
-        this.displayValue = `URL Value was: ${urlValue}`;
-        // You can use an imported APEX as a promise here to the values further in:
-        // myWiredFunction({parameter: urlValue})
-        //  .then((result) => { // update tracked values.})
-        //  .catch((error) => { // Error handler. });
+        reflectValue({ value: urlValue })
+          .then((result) => {
+            this.displayValue = `URL Value was: ${result}`;
+          })
+          .catch((error) => {
+            this.displayValue = `Error during processing: ${error}`;
+          });
       } else {
         this.displayValue = `URL Value was not set`;
       }

@@ -32,3 +32,40 @@ getStateParameters(currentPageReference) {
 7. Go to a contact record, and edit the page. Add your new compantent to the side bar. Save and activate the page.
 8. Return to the record page, the componant should appear and say `URL Value was not set`.
 9. In the address bar add to the end of the url: `?c__myUrlParameter=Hello`, and reload the page, the compantant should now read `URL Value was Hello`.
+
+# Add APEX callback.
+
+1. Create an APEX class called `valueReflection` with this function:
+
+```Java
+@AuraEnabled(cacheable=true)
+    public static String reflectValue(String value) {
+        // Really you should do something useful here.
+        return value;
+    }
+```
+
+2. Create appropreiate tests, and deploy the code.
+3. Import the new APEX into your JavaScipt file: `import reflectValue from "@salesforce/apex/valueReflection.reflectValue";`
+4. Update the getStateParameters handler to call the new function as a promise:
+
+```JS
+  getStateParameters(currentPageReference) {
+    if (currentPageReference) {
+      const urlValue = currentPageReference.state.c__myUrlParameter;
+      if (urlValue) {
+        reflectValue({ value: urlValue })
+          .then((result) => {
+            this.displayValue = `URL Value was: ${result}`;
+          })
+          .catch((error) => {
+            this.displayValue = `Error during processing: ${error}`;
+          });
+      } else {
+        this.displayValue = `URL Value was not set`;
+      }
+    }
+  }
+```
+
+5. Deploy the changes.
