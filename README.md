@@ -1,19 +1,18 @@
 # Example Lightning Web Componant that reads URL parameters
 
-To recreate this project from scratch within an existing SFDX project:
+This project assumes you have completed the [Trailhead project for a Hello World Lightning Web Componant](https://trailhead.salesforce.com/content/learn/projects/quick-start-lightning-web-components/create-a-hello-world-lightning-web-component), or have equivolent skills (basically I'm not reviewing how to setup your environment, connect to the org, or deploy code).
 
-1. `sfdx force:lightning:component:create --type lwc -n parameter_reader` or use VSCode extension to generated LWC.
-2. Optional: run `npm install` to get all the various JS linting and testing defaults recommended by Salesforce.
-3. Update generated meta.xml file to match this one's
-4. To the start of the LWC's JS file add:
+1. `sfdx force:lightning:component:create --type lwc -n parameter_reader` or use VSCode extension to generated LWC. Optionally run `npm install` to get all the various JS linting and testing defaults recommended by Salesforce.
+2. Update generated meta.xml file to match this one's
+3. To the start of the LWC's JS file add:
 
 ```js
 import { LightningElement, wire, track } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
 ```
 
-5. Setup the tracked value for the display at the top of the JS class: `@track displayValue;`
-6. Wire up the CurrentPageReference to get the value from the URL.
+4. Setup the tracked value for the display at the top of the JS class: `@track displayValue;`
+5. Wire up the CurrentPageReference to get the value from the URL.
 
 ```js
 @wire(CurrentPageReference)
@@ -28,3 +27,8 @@ getStateParameters(currentPageReference) {
   }
 }
 ```
+
+6. Deploy your code to your org.
+7. Go to a contact record, and edit the page. Add your new compantent to the side bar. Save and activate the page.
+8. Return to the record page, the componant should appear and say `URL Value was not set`.
+9. In the address bar add to the end of the url: `?c__myUrlParameter=Hello`, and reload the page, the compantant should now read `URL Value was Hello`.
