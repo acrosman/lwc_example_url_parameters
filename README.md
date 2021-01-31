@@ -28,10 +28,24 @@ getStateParameters(currentPageReference) {
 }
 ```
 
-6. Deploy your code to your org.
-7. Go to a contact record, and edit the page. Add your new compantent to the side bar. Save and activate the page.
-8. Return to the record page, the componant should appear and say `URL Value was not set`.
-9. In the address bar add to the end of the url: `?c__myUrlParameter=Hello`, and reload the page, the compantant should now read `URL Value was Hello`.
+6. Update the HTML to display the value:
+
+```html
+<template>
+  <div>
+    <lightning-card title="Url Sample" icon-name="custom:custom14">
+      <div class="slds-m-around_medium">
+        <p>{displayValue}</p>
+      </div>
+    </lightning-card>
+  </div>
+</template>
+```
+
+7. Deploy your code to your org.
+8. Go to a contact record, and edit the page. Add your new compantent to the side bar. Save and activate the page.
+9. Return to the record page, the componant should appear and say `URL Value was not set`.
+10. In the address bar add to the end of the url: `?c__myUrlParameter=Hello`, and reload the page, the compantant should now read `URL Value was Hello`.
 
 # Add APEX callback.
 
@@ -68,4 +82,4 @@ getStateParameters(currentPageReference) {
   }
 ```
 
-5. Deploy the changes.
+5. Deploy the changes, and reload your example page.
