@@ -1,18 +1,30 @@
-# Salesforce DX Project: Next Steps
+# Example Lightning Web Componant that reads URL parameters
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+To recreate this project from scratch within an existing SFDX project:
 
-## How Do You Plan to Deploy Your Changes?
+1. `sfdx force:lightning:component:create --type lwc -n parameter_reader` or use VSCode extension to generated LWC.
+2. Optional: run `npm install` to get all the various JS linting and testing defaults recommended by Salesforce.
+3. Update generated meta.xml file to match this one's
+4. To the start of the LWC's JS file add:
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+```js
+import { LightningElement, wire, track } from "lwc";
+import { CurrentPageReference } from "lightning/navigation";
+```
 
-## Configure Your Salesforce DX Project
+5. Setup the tracked value for the display at the top of the JS class: `@track displayValue;`
+6. Wire up the CurrentPageReference to get the value from the URL.
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
-
-## Read All About It
-
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+```js
+@wire(CurrentPageReference)
+getStateParameters(currentPageReference) {
+  if (currentPageReference) {
+    const urlValue = currentPageReference.state.c__myUrlParameter;
+    if (urlValue) {
+      this.displayValue = `URL Value was: ${urlValue}`;
+    } else {
+      this.displayValue = `URL Value was not set`;
+    }
+  }
+}
+```
